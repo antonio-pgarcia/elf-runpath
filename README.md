@@ -1,4 +1,4 @@
 elf-runpath
 ===========
 
-Add run path to ELF executable files 
+This tool allows the modification of RPATH in libraries or executables in ELF format. 
