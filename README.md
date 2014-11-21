@@ -1,5 +1,4 @@
 #elf-runpath#
-===========
 
 ##Introduction##
 
