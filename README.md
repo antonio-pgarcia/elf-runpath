@@ -11,7 +11,7 @@ This tool allows the modification of [RPATH](http://en.wikipedia.org/wiki/Rpath)
 
 Command line                        | Description
 ----------------------------------- | -------------
-**elf_rpath –v** <file>           | Show the current value of RPATH header
-**elf_rpath –o** <file>           | Sets the  RPATH header value to $ORIGIN
-**elf_rpath** <file> <rpath>      | Sets the  RPATH header to any user provided value
+**elf_rpath –v** <file> | Show the current value of RPATH header
+**elf_rpath –o** <file> | Sets the  RPATH header value to $ORIGIN
+**elf_rpath** <file> <rpath> | Sets the  RPATH header to any user provided value
 
