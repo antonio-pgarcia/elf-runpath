@@ -9,9 +9,9 @@ This tool allows the modification of [RPATH](http://en.wikipedia.org/wiki/Rpath)
 ##Command line options##
 
 
-Command line                            | Description
---------------------------------------- | -------------
-**elf_rpath –v** *```<file name>```*            | Show the current value of RPATH header
-**elf_rpath –o** *file name)*            | Sets the  RPATH header value to $ORIGIN
-**elf_rpath** *file name* *rpath value* | Sets the  RPATH header to any user provided value
+Command line                                            | Description
+------------------------------------------------------- | -------------
+**elf_rpath –v** *```<file name>```*                    | Show the current value of RPATH header
+**elf_rpath –o** *```<file name>```*                    | Sets the  RPATH header value to $ORIGIN
+**elf_rpath** *```<file name>```* *```<rpath value>```* | Sets the  RPATH header to any user provided value
 
