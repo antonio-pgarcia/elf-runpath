@@ -1,4 +1,4 @@
 elf-runpath
 ===========
 
-This tool allows the modification of RPATH [http://en.wikipedia.org/wiki/Rpath] in libraries or executables in ELF format.  
+This tool allows the modification of RPATH <ref>http://en.wikipedia.org/wiki/Rpath</ref> in libraries or executables in ELF format.  
