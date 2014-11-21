@@ -4,7 +4,7 @@ This tool allows the modification of [RPATH](http://en.wikipedia.org/wiki/Rpath)
 
 ##Compiling##
 
-**```gcc elf_rpath.c -o elf_rpath -lelf```*
+**```gcc elf_rpath.c -o elf_rpath -lelf```**
 
 ##Command line options##
 
