@@ -77,8 +77,7 @@ elf_rpath <File> <RPATH> => Sets RPATH                <=\n"
  * TYPEDEF SECTION
  *----------------------------------------------------------------------*/
 
-typedef struct 
-{
+typedef struct {
  int 	m_iHandle;
  int	m_iForce;
  int	m_iView;
@@ -87,8 +86,7 @@ typedef struct
  char 	*m_szRPath;
 } _OPTIONS;
 
-typedef struct
-{
+typedef struct {
  Elf 		*m_objELF;
  Elf_Scn 	*m_objSCN;		
  Elf32_Dyn 	*m_objDyn;
@@ -163,8 +161,7 @@ void MODIFY( char *szNewValue );
  * MAIN			
  *----------------------------------------------------------------------*/
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 
   	/*  
    	*  Init Section 
@@ -178,22 +175,19 @@ int main(int argc, char *argv[])
 	
 	ELF_OPEN();
 		    
-	if( GET_VIEW() )
-	{
+	if( GET_VIEW() ) {
 		ELF_ITERATE_SCN( ELF_FIND_RPATH );
 		ELF_GET_ENTRY();
 	}
     	
-    	if( GET_ORIGIN() )
-	{
+    	if( GET_ORIGIN() ) {
 		ELF_ITERATE_SCN( ELF_FIND_RPATH );
 		ELF_GET_ENTRY();
 		MODIFY( ORIGIN );
 		
 	}
     	
-    	if( GET_RPATH() )	
-    	{
+    	if( GET_RPATH() ) {
 		ELF_ITERATE_SCN( ELF_FIND_RPATH );
 		ELF_GET_ENTRY();
 		MODIFY( GET_RPATH() );
@@ -215,8 +209,7 @@ int main(int argc, char *argv[])
  * Function: INIT_OPTIONS
  *
  *----------------------------------------------------------------------*/ 
-void INIT_OPTIONS( void )
-{
+void INIT_OPTIONS( void ) {
 	SET_FORCE( 0 );
 	SET_VIEW( 0 );
 	SET_ORIGIN( 0 );
@@ -227,14 +220,11 @@ void INIT_OPTIONS( void )
  * Function: PARSE_OPTIONS
  *
  *----------------------------------------------------------------------*/ 
-void PARSE_OPTIONS( int iArgC, char *pszArgV[] )
-{
+void PARSE_OPTIONS( int iArgC, char *pszArgV[] ) {
  int m_iOption;
 
-	while ( (m_iOption= getopt( iArgC, pszArgV, OPTIONS ) ) != EOF)
-	{
-		switch( m_iOption )
-		{
+	while ( (m_iOption= getopt( iArgC, pszArgV, OPTIONS ) ) != EOF) {
+		switch( m_iOption ) {
 			case 'f': 
 				SET_FORCE( 1 );
         			break;
@@ -258,12 +248,10 @@ void PARSE_OPTIONS( int iArgC, char *pszArgV[] )
  * Function: VALIDATE_OPTIONS
  *
  *----------------------------------------------------------------------*/ 
-void VALIDATE_OPTIONS( int iArgC, char *pszArgV[] )
-{
+void VALIDATE_OPTIONS( int iArgC, char *pszArgV[] ) {
  	if( ( !( GET_ORIGIN() & GET_VIEW() ) ) &&  iArgC == 3  ) return;
  	if( ( !( GET_ORIGIN() | GET_VIEW() ) ) &&  iArgC == 3  ) return;
  
- 	
  	SHOW_INVALID();
  	SHOW_HELP();
  	exit( 1 );
@@ -274,12 +262,10 @@ void VALIDATE_OPTIONS( int iArgC, char *pszArgV[] )
  * Function: INIT_NAMES
  *
  *----------------------------------------------------------------------*/ 
-void INIT_NAMES( int iArgC, char *pszArgV[] )
-{
+void INIT_NAMES( int iArgC, char *pszArgV[] ) {
 	if( GET_ORIGIN() | GET_VIEW()  ) 
 		SET_FILE( pszArgV[ optind ] );		
-	else
-	{
+	else {
 		SET_FILE( pszArgV[ optind ] );		
 		SET_RPATH( pszArgV[ optind + 1 ] );
 	}
@@ -290,12 +276,10 @@ void INIT_NAMES( int iArgC, char *pszArgV[] )
  * Function: OPEN_FILE
  *
  *----------------------------------------------------------------------*/ 
-int OPEN_FILE( )
-{
+int OPEN_FILE( ) {
  int m_iTemp= 0;
   	
- 	if( ( m_iTemp= open( GET_FILE(), ( GET_VIEW() ? O_RDONLY : O_RDWR ) )) == -1) 
-	{
+ 	if( ( m_iTemp= open( GET_FILE(), ( GET_VIEW() ? O_RDONLY : O_RDWR ) )) == -1) {
   		fprintf( stderr,"Cannot open file: %s\n", GET_FILE() );
   		exit(1); 
   	}
@@ -306,8 +290,7 @@ int OPEN_FILE( )
  * Function: ELF_OPEN
  *
  *----------------------------------------------------------------------*/ 
-void ELF_OPEN( void )
-{
+void ELF_OPEN( void ) {
  Elf32_Ehdr *m_objSCN_HEADER;	
  
 	SET_HANDLE( OPEN_FILE( ) );
@@ -315,14 +298,12 @@ void ELF_OPEN( void )
  	elf_version( EV_CURRENT ) ;
 	g_objElfHnd.m_objELF= elf_begin( GET_HANDLE() , ( GET_VIEW() ? ELF_C_READ : ELF_C_RDWR ), (Elf *)NULL);
 
- 	if( elf_kind( g_objElfHnd.m_objELF ) != ELF_K_ELF ) 
- 	{
+ 	if( elf_kind( g_objElfHnd.m_objELF ) != ELF_K_ELF ) {
   		fprintf(stderr,"Its not an ELF File\n");
   		exit(1);
 	}
 	
-	if (( m_objSCN_HEADER = elf32_getehdr( g_objElfHnd.m_objELF )) == 0) 
-	{
+	if (( m_objSCN_HEADER = elf32_getehdr( g_objElfHnd.m_objELF )) == 0) {
   		fprintf(stderr,"elf32_getehdr failed.\n");
   		exit(1);
 	}
@@ -332,8 +313,7 @@ void ELF_OPEN( void )
  * Function: ELF_CLOSE
  *
  *----------------------------------------------------------------------*/ 
-void ELF_CLOSE( void )
-{
+void ELF_CLOSE( void ) {
 	if( ! GET_VIEW() )
 		if ( elf_update( g_objElfHnd.m_objELF , ELF_C_WRITE) == -1 ) 
 	  		fprintf(stdout,"elf_update failed.\n"); 
@@ -346,8 +326,7 @@ void ELF_CLOSE( void )
  * Function: ELF_ITERATE_SCN
  *
  *----------------------------------------------------------------------*/ 
-void ELF_ITERATE_SCN( int (*objCallBack)(void) )
-{
+void ELF_ITERATE_SCN( int (*objCallBack)(void) ) {
  Elf32_Shdr 	*m_objSCN_SHDR;
  Elf_Data 	*m_objData;
  
@@ -359,22 +338,15 @@ void ELF_ITERATE_SCN( int (*objCallBack)(void) )
 	* BEGIN
 	* PROCESS SECTIONS OF AN ELF FILE
 	*/
-	while (( g_objElfHnd.m_objSCN= elf_nextscn( g_objElfHnd.m_objELF, g_objElfHnd.m_objSCN )) != NULL) 
-	{
+	while (( g_objElfHnd.m_objSCN= elf_nextscn( g_objElfHnd.m_objELF, g_objElfHnd.m_objSCN )) != NULL) {
 		m_objSCN_SHDR = elf32_getshdr( g_objElfHnd.m_objSCN );
 		
-  		if ( m_objSCN_SHDR->sh_type == SHT_DYNAMIC) 
-		{
+  		if ( m_objSCN_SHDR->sh_type == SHT_DYNAMIC) {
     			m_objData= NULL;
-    			while (( m_objData= elf_getdata( g_objElfHnd.m_objSCN, m_objData ) ) != NULL) 
-			{
+    			while (( m_objData= elf_getdata( g_objElfHnd.m_objSCN, m_objData ) ) != NULL) {
       				g_objElfHnd.m_objDyn= (Elf32_Dyn *) m_objData->d_buf;
-      				while ( g_objElfHnd.m_objDyn->d_tag != DT_NULL ) 
-				{
-					
-					
+      				while ( g_objElfHnd.m_objDyn->d_tag != DT_NULL ) {
 					if( ! (*objCallBack)() ) return;
-					
 					g_objElfHnd.m_objDyn++;
 				}
 			}
@@ -392,8 +364,7 @@ void ELF_ITERATE_SCN( int (*objCallBack)(void) )
  * Function: ELF_GET_ENTRY
  *
  *----------------------------------------------------------------------*/ 
-int ELF_GET_ENTRY( void )
-{
+int ELF_GET_ENTRY( void ) {
  char *m_szBuffer= NULL;
  size_t 	m_objIndx;
  Elf32_Shdr 	*m_objSCN_SHDR;
@@ -410,10 +381,8 @@ int ELF_GET_ENTRY( void )
  * Function: ELF_FIND_RPATH
  *
  *----------------------------------------------------------------------*/ 
-int ELF_FIND_RPATH( void )
-{
+int ELF_FIND_RPATH( void ) {
 	if( g_objElfHnd.m_objDyn->d_tag == DT_RPATH  ) return 0;
-	
 	return( 1 );
 }
 
@@ -421,8 +390,7 @@ int ELF_FIND_RPATH( void )
  * Function: MODIFY
  *
  *----------------------------------------------------------------------*/ 
-void MODIFY( char *szNewValue )
-{
+void MODIFY( char *szNewValue ) {
  Elf_Scn  	*m_objSCN;	
  Elf_Data 	*m_objData;
  Elf32_Shdr 	*m_objSCN_SHDR;
@@ -439,8 +407,7 @@ void MODIFY( char *szNewValue )
 	m_objSCN= elf_getscn( g_objElfHnd.m_objELF , m_objIndx ); 
         m_objData= NULL; 
         
-        while( ( m_objData= elf_getdata( m_objSCN, m_objData )) != NULL ) 
-        { 
+        while( ( m_objData= elf_getdata( m_objSCN, m_objData )) != NULL ) { 
               	m_iBufferSize= m_objData->d_size; 
             	m_szBuffer= m_objData->d_buf; 
             	
@@ -450,8 +417,6 @@ void MODIFY( char *szNewValue )
 
             	memmove(&m_szBuffer[g_objElfHnd.m_objDyn->d_un.d_ptr], szNewValue, strlen( szNewValue ) ); 
             	m_szBuffer[g_objElfHnd.m_objDyn->d_un.d_ptr+ strlen( szNewValue ) ] = 0; 
-
-
         } 
 
 }
