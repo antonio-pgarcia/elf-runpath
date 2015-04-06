@@ -220,23 +220,20 @@ void INIT_OPTIONS( void ) {
  * Function: PARSE_OPTIONS
  *
  *----------------------------------------------------------------------*/ 
-void PARSE_OPTIONS( int iArgC, char *pszArgV[] ) {
+void PARSE_OPTIONS(int iArgC, char *pszArgV[]) {
  int m_iOption;
 
-	while ( (m_iOption= getopt( iArgC, pszArgV, OPTIONS ) ) != EOF) {
-		switch( m_iOption ) {
+	while((m_iOption= getopt(iArgC, pszArgV, OPTIONS) ) != EOF) {
+		switch(m_iOption) {
 			case 'f': 
-				SET_FORCE( 1 );
+				SET_FORCE(1);
         			break;
-
 			case 'v': 
-				SET_VIEW( 1 );
+				SET_VIEW(1);
         			break;
-			
 			case 'o': 
-				SET_ORIGIN( 1 );
+				SET_ORIGIN(1);
         			break;
-
 			case '?': 
 				SHOW_HELP();
 				break;
@@ -332,31 +329,20 @@ void ELF_ITERATE_SCN( int (*objCallBack)(void) ) {
  
 
 	g_objElfHnd.m_objSCN= NULL;
-
-
-	/*
-	* BEGIN
-	* PROCESS SECTIONS OF AN ELF FILE
-	*/
-	while (( g_objElfHnd.m_objSCN= elf_nextscn( g_objElfHnd.m_objELF, g_objElfHnd.m_objSCN )) != NULL) {
+	while(( g_objElfHnd.m_objSCN= elf_nextscn( g_objElfHnd.m_objELF, g_objElfHnd.m_objSCN )) != NULL) {
 		m_objSCN_SHDR = elf32_getshdr( g_objElfHnd.m_objSCN );
-		
   		if ( m_objSCN_SHDR->sh_type == SHT_DYNAMIC) {
     			m_objData= NULL;
     			while (( m_objData= elf_getdata( g_objElfHnd.m_objSCN, m_objData ) ) != NULL) {
       				g_objElfHnd.m_objDyn= (Elf32_Dyn *) m_objData->d_buf;
       				while ( g_objElfHnd.m_objDyn->d_tag != DT_NULL ) {
-					if( ! (*objCallBack)() ) return;
+					if(!(*objCallBack)()) return;
 					g_objElfHnd.m_objDyn++;
 				}
 			}
 		}
 
 	}
-	/*
-	* PROCESS SECTIONS OF AN ELF FILE
-	* END
-	*/
 
 }
 
@@ -373,17 +359,17 @@ int ELF_GET_ENTRY( void ) {
  m_objIndx= m_objSCN_SHDR->sh_link;
  m_szBuffer= elf_strptr( g_objElfHnd.m_objELF, m_objIndx, g_objElfHnd.m_objDyn->d_un.d_ptr);
  
- printf("VALUE: %s\n", STRING( m_szBuffer ) );
- return( 0 );
+ //printf("VALUE: %s\n", STRING( m_szBuffer ) );
+ return(0);
 }
 
 /*----------------------------------------------------------------------
  * Function: ELF_FIND_RPATH
  *
  *----------------------------------------------------------------------*/ 
-int ELF_FIND_RPATH( void ) {
+int ELF_FIND_RPATH(void) {
 	if( g_objElfHnd.m_objDyn->d_tag == DT_RPATH  ) return 0;
-	return( 1 );
+	return(1);
 }
 
 /*----------------------------------------------------------------------
